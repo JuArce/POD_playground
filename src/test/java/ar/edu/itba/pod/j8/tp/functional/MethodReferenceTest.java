@@ -1,5 +1,6 @@
 package ar.edu.itba.pod.j8.tp.functional;
 
+import static junit.framework.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -34,20 +35,20 @@ public class MethodReferenceTest {
     @Test
     public final void to_static_method() {
         final BinaryOperator<Integer> sum = Integer::sum;
-        assertEquals(new Integer(0), sum.apply(1, 2));
+        assertEquals(Integer.valueOf(3), sum.apply(1, 2));
     }
 
     @Test
     public final void to_specified_instance_method() {
         final String text = "hola";
         final Supplier<String> upperfier = text::toUpperCase;
-        assertEquals("", upperfier.get());
+        assertEquals("HOLA", upperfier.get());
     }
 
     @Test
     public final void to_unspecified_instance_method() {
         final Function<String, String> upperfier = String::toUpperCase;
-        assertEquals("", upperfier.apply("hola"));
+        assertEquals("HOLA", upperfier.apply("hola"));
     }
 
     @Test
@@ -55,19 +56,19 @@ public class MethodReferenceTest {
         final Supplier<Set<Integer>> constructor = HashSet<Integer>::new;
         Set<Integer> set = constructor.get();
         assertNotNull(set);
-        assertEquals(1, set.size());
+        assertEquals(0, set.size());
 
         // infers the constructor from the type of the variable!!!!!
         final Function<Collection<Integer>, Set<Integer>> otherConstructor = HashSet<Integer>::new;
         set = otherConstructor.apply(Arrays.asList(1, 2, 3));
         assertNotNull(set);
-        assertEquals(1, set.size());
-        // FIXME assertWHAT(set.contains(1));
+        assertEquals(3, set.size());
+        assertTrue(set.contains(1));
     }
 
     @Test
     public final void to_array_constructor() {
         final IntFunction<int[]> arrayMaker = int[]::new;
-        assertEquals(0, arrayMaker.apply(10).length);
+        assertEquals(10, arrayMaker.apply(10).length);
     }
 }
