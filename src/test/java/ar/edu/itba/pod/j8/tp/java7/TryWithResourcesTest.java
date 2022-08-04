@@ -21,7 +21,7 @@ import org.junit.Test;
  * @author Marcelo
  * @since Jul 28, 2015
  */
-public final class TryWithReourcesTest {
+public final class TryWithResourcesTest {
 
     private Closeable closeableMock;
 
@@ -50,8 +50,8 @@ public final class TryWithReourcesTest {
 
     /** verifies the amount of calls to close method on the {@link #closeableMock} */
     private void verify_close_calls() throws IOException {
-        // FIXME how many times it was called??
-        verify(closeableMock, times(0)).close();
+        // how many times it was called??
+        verify(closeableMock, times(1)).close();
     }
 
 }
