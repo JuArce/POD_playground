@@ -52,56 +52,46 @@ public class LambdaTest {
 
     @Test
     public final void interface_can_be_exchanged_to_lambda() throws Exception {
-        // FIXME: Replace the interfaces for lambdas (hint: look above)
+        // Replace the interfaces for lambdas (hint: look above)
         // And correct
-        assertEquals(new Integer(0), lambdas.run(new PrivilegedAction<Integer>() {
-            @Override
-            public Integer run() {
-                // TODO: Auto-generated method stub
-                return 1;
-            }
-        }));
+        assertEquals(Integer.valueOf(0), lambdas.run(() -> 0));
 
-        assertEquals("", lambdas.run(new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                return "running";
-            }
-        }));
+        assertEquals("", lambdas.run(() -> ""));
     }
 
     @Test
     public final void lambda_target_type_is_inferred_on_variable_assignment() {
         final FileFilter filter = (file -> file.canWrite());
-        // FIXME: fix the assertion
+        // fix the assertion
         assertTrue(lambdas.rootDirectoryComplies(filter));
     }
 
     @Test
-    public final void same_lambda_infered_by_assigantion_type() throws Exception {
+    public final void same_lambda_inferred_by_assignation_type() throws Exception {
         final Callable<String> callable = () -> "done";
         final PrivilegedAction<String> action = () -> "done";
-        // FIXME: what's the output
-        assertEquals("", callable.call());
-        assertEquals("", action.run());
+        // what's the output
+        assertEquals("done", callable.call());
+        assertEquals("done", action.run());
     }
 
     @Test
     @SuppressWarnings("unchecked")
     public final void lambda_type_is_inferred_on_return_type() throws Exception {
-        assertEquals("", lambdas.run(() -> "hola"));
+        assertEquals("hola", lambdas.run(() -> "hola"));
 
-        // FIXME which one is called?
-        verify(lambdas, times(99)).run(any(Callable.class));
-        verify(lambdas, times(99)).run(any(PrivilegedAction.class));
-        verify(lambdas, times(99)).run(any(Runnable.class));
+        // TODO preguntar
+        // which one is called?
+        verify(lambdas, times(1)).run(any(Callable.class));
+        verify(lambdas, times(0)).run(any(PrivilegedAction.class));
+        verify(lambdas, times(0)).run(any(Runnable.class));
 
         reset(lambdas);
-        assertEquals(new Integer(0), lambdas.run(() -> 1));
-        // FIXME which one is called?
-        verify(lambdas, times(99)).run(any(Callable.class));
-        verify(lambdas, times(99)).run(any(PrivilegedAction.class));
-        verify(lambdas, times(99)).run(any(Runnable.class));
+        assertEquals(Integer.valueOf(1), lambdas.run(() -> 1));
+        // which one is called?
+        verify(lambdas, times(0)).run(any(Callable.class));
+        verify(lambdas, times(1)).run(any(PrivilegedAction.class));
+        verify(lambdas, times(0)).run(any(Runnable.class));
     }
 
     @Test
@@ -109,20 +99,20 @@ public class LambdaTest {
         final int finalVariable = 1;
         int effectivelyFinalVariable = 2;
 
-        // FIXME what's the value
-        assertEquals(new Integer(00), lambdas.run(() -> finalVariable + effectivelyFinalVariable));
+        // what's the value
+        assertEquals(Integer.valueOf(3), lambdas.run(() -> finalVariable + effectivelyFinalVariable));
 
         // FIXME THIS DOES NOT COMPILE THE VARIABLE IS NO LONGER EFFECTIVELY FINAL
-        // assertEquals(new Integer(3), lambdas.run(() -> effectivelyFinalVariable = 3));
+//         assertEquals(Integer.valueOf(3), lambdas.run(() -> effectivelyFinalVariable = 3));
 
         // FIXME THIS DOES NOT WORK DUE TO SHADOWING OF THE VARIABLE
-        // assertEquals(new Integer(3), lambdas.weirdEquals((x, effectivelyFinalVariable) -> 1));
+//         assertEquals(new Integer(3), lambdas.weirdEquals((x, effectivelyFinalVariable) -> 1));
     }
 
     @Test
     public final void lambda_lexical_scope() throws Exception {
         // what's the value
-        assertEquals("", new LambdaScopingHelloWorld().toString());
-        assertEquals("", new LambdaScopingHelloWorld().r1.call());
+        assertEquals("Hello, world!", new LambdaScopingHelloWorld().toString());
+        assertEquals("Hello, world!", new LambdaScopingHelloWorld().r1.call());
     }
 }
