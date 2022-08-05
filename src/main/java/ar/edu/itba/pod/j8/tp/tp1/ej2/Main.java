@@ -4,9 +4,7 @@ import ar.edu.itba.pod.j8.tp.tp1.ej2.model.Continent;
 import ar.edu.itba.pod.j8.tp.tp1.ej2.model.Country;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Main {
@@ -49,32 +47,39 @@ public class Main {
         /**
          * 4. Crear un set con los países que contengan en su nombre la letra ‘a’
          */
-        countries.stream().filter(c -> c.getName().contains("a")).collect(Collectors.toList());
+        countries.stream().filter(c -> c.getName().contains("a")).collect(Collectors.toSet());
 
         /**
          * 5. Crear una lista con los nombres de los países que contengan en su nombre la letra ‘a’
          */
+        countries.stream().filter(c -> c.getName().contains("a")).collect(Collectors.toList());
 
         /**
          * 6. Crear un mapa (K, V) con K: continente y V: lista de países
          */
+        Map<Continent, List<Country>> m = countries.stream().collect(Collectors.groupingBy(Country::getContinent));
 
         /**
          * 7. Crear un mapa (K, V) con K: continente y V: total de habitantes
          */
+        Map<Continent, Long> m2 = countries.stream().collect(Collectors.groupingBy(Country::getContinent, Collectors.summingLong(Country::getPopulation)));
 
         /**
          * 8. Crear un mapa (K, V) con K: continente y V: promedio de habitantes
          */
+        Map<Continent, Double> m3 = countries.stream().collect(Collectors.groupingBy(Country::getContinent, Collectors.averagingLong(Country::getPopulation)));
+
 
         /**
          * 9. Obtener un país que tenga una ‘a’ en su nombre y la cantidad de habitantes sea mayor a 1.000.000.000.
          *    En caso de no encontrar uno, devolver null
          */
+        Country c1 = countries.stream().filter(c -> c.getName().contains("a") && c.getPopulation() > 1000000000).findFirst().orElse(null);
 
         /**
          * 10. Obtener el país con el mayor número de habitantes
          */
+        Country max = countries.stream().max(Comparator.comparingLong(Country::getPopulation)).orElse(null);
 
         /**
          * 11. Listar todos los países cuya independencia fue en un año bisiesto
