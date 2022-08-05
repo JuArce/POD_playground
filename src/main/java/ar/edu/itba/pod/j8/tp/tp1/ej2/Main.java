@@ -32,50 +32,53 @@ public class Main {
         /**
          * 1. Imprimir en pantalla todos los países
          */
-        countries.stream().forEach(System.out::println);
+        countries.forEach(System.out::println);
 
         /**
-         * 2. Imprimir en pantalla todos los países
+         * 2. Imprimir en pantalla a los países de América
+         */
+        countries.stream().filter(c -> c.getContinent() == Continent.AMERICA).forEach(System.out::println);
+
+        /**
+         * 3. Crear una lista con los países de América
          */
 
         /**
-         * 3. Imprimir en pantalla todos los países
+         * 4. Crear un set con las países que contengan en su nombre la letra ‘a’
          */
 
         /**
-         * 4. Imprimir en pantalla todos los países
+         * 5. Crear una lista con los nombres de los países que contengan en su nombre la letra ‘a’
          */
 
         /**
-         * 5. Imprimir en pantalla todos los países
+         * 6. Crear un mapa (K, V) con K: continente y V: lista de países
          */
 
         /**
-         * 6. Imprimir en pantalla todos los países
+         * 7. Crear un mapa (K, V) con K: continente y V: total de habitantes
          */
 
         /**
-         * 7. Imprimir en pantalla todos los países
+         * 8. Crear un mapa (K, V) con K: continente y V: promedio de habitantes
          */
 
         /**
-         * 8. Imprimir en pantalla todos los países
+         * 9. Obtener un país que tenga una ‘a’ en su nombre y la cantidad de habitantes sea mayor a 1.000.000.000.
+         *    En caso de no encontrar uno, devolver null
          */
 
         /**
-         * 9. Imprimir en pantalla todos los países
+         * 10. Obtener el país con el mayor número de habitantes
          */
 
         /**
-         * 10. Imprimir en pantalla todos los países
+         * 11. Listar todos los países cuya independencia fue en un año bisiesto
          */
 
         /**
-         * 11. Imprimir en pantalla todos los países
-         */
-
-        /**
-         * 12. Imprimir en pantalla todos los países
+         * 12. Armar un mapa que muestre la cantidad de países que se independizaron por siglo.
+         *     Donde el siglo se puede escribir como 1800 o 19 (para toda independencia ocurrida en un año 18XX)
          */
 
     }
