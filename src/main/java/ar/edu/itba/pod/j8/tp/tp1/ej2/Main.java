@@ -6,6 +6,8 @@ import ar.edu.itba.pod.j8.tp.tp1.ej2.model.Country;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -42,10 +44,12 @@ public class Main {
         /**
          * 3. Crear una lista con los países de América
          */
+        List<Country> america = countries.stream().filter(c -> c.getContinent() == Continent.AMERICA).collect(Collectors.toList());
 
         /**
-         * 4. Crear un set con las países que contengan en su nombre la letra ‘a’
+         * 4. Crear un set con los países que contengan en su nombre la letra ‘a’
          */
+        countries.stream().filter(c -> c.getName().contains("a")).collect(Collectors.toList());
 
         /**
          * 5. Crear una lista con los nombres de los países que contengan en su nombre la letra ‘a’
