@@ -37,12 +37,12 @@ public class Main {
         /**
          * 2. Imprimir en pantalla a los países de América
          */
-        countries.stream().filter(c -> c.getContinent() == Continent.AMERICA).forEach(System.out::println);
+        countries.stream().filter(c -> c.getContinent().equals(Continent.AMERICA)).forEach(System.out::println);
 
         /**
          * 3. Crear una lista con los países de América
          */
-        List<Country> america = countries.stream().filter(c -> c.getContinent() == Continent.AMERICA).collect(Collectors.toList());
+        List<Country> america = countries.stream().filter(c -> c.getContinent().equals(Continent.AMERICA)).collect(Collectors.toList());
 
         /**
          * 4. Crear un set con los países que contengan en su nombre la letra ‘a’

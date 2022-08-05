@@ -34,39 +34,41 @@ public class StreamCollectTest {
     @Test
     public void collect_with_consumer() {
         final double average = ages.collect(Averager::new, Averager::accept, Averager::combine).average();
-        assertEquals("what's  the average", new Double(0), average, 0.001);
+        assertEquals("what's  the average", new Double(31), average, 0.001);
     }
 
     @Test
     public final void average_with_collector() {
-        final Double averege = ages.collect(Collectors.averagingInt(x -> x));
-        assertEquals("what's  the average", new Double(0), averege, 0.001);
+        final Double average = ages.collect(Collectors.averagingInt(x -> x));
+        assertEquals("what's  the average", new Double(31), average, 0.001);
     }
 
     @Test
     public final void sum_with_collector() {
         final Integer sum = ages.collect(Collectors.summingInt(x -> x));
-        assertEquals("what's the sum", new Integer(0), sum);
+        assertEquals("what's the sum", new Integer(217), sum);
     }
 
     @Test
     public final void joining_with_collector() {
         final Stream<String> words = Stream.of("this", "is", "a", "phrase");
         final String phrase = words.collect(Collectors.joining(", "));
-        assertEquals("what's the phrase", "", phrase);
+        assertEquals("what's the phrase", "this, is, a, phrase", phrase);
     }
 
     @Test
     public final void grouping_with_collector() {
-        final List<Person> roster = Arrays.asList(new Person("jack", LocalDate.of(1999, 1, 1), Sex.MALE,
-                "j@mail.com"), new Person("danielle", LocalDate.of(1992, 12, 1), Sex.FEMALE, "d@mail.com"),
+        final List<Person> roster = Arrays.asList(
+                new Person("jack", LocalDate.of(1999, 1, 1), Sex.MALE, "j@mail.com"),
+                new Person("danielle", LocalDate.of(1992, 12, 1), Sex.FEMALE, "d@mail.com"),
                 new Person("livy", LocalDate.of(1989, 5, 12), Sex.FEMALE, "l@mail.com"));
 
         final Map<Sex, List<Person>> divided = roster.stream().collect(
                 Collectors.groupingBy(Person::getGender));
 
-        assertEquals("which are females", Arrays.asList(), divided.get(Sex.FEMALE));
-        assertEquals("which are males", Arrays.asList(), divided.get(Sex.MALE));
+        assertEquals("which are females", Arrays.asList("danielle", "livy"),
+                divided.get(Sex.FEMALE).stream().map(Person::getName).collect(Collectors.toList()));
+        assertEquals("which are males", Arrays.asList("jack"), divided.get(Sex.MALE).stream().map(Person::getName).collect(Collectors.toList()));
     }
 
     @Test
