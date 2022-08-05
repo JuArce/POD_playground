@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,12 +32,13 @@ public class StreamIntegrationTest {
     @Before
     public final void before() {
 
-        roster = Arrays.asList(new Person("jack", LocalDate.of(1999, 1, 1), Sex.MALE, "j@mail.com"),
-                new Person("danielle", LocalDate.of(1992, 12, 1), Sex.FEMALE, "d@mail.com"), new Person(
-                        "livy", LocalDate.of(1989, 5, 12), Sex.FEMALE, "l@mail.com"), new Person("mark",
-                        LocalDate.of(1993, 1, 10), Sex.MALE, "m@mail.com"),
-                new Person("anna", LocalDate.of(1985, 3, 11), Sex.FEMALE, "a@mail.com"), new Person("bree",
-                        LocalDate.of(1985, 5, 6), Sex.FEMALE, "b@mail.com"));
+        roster = Arrays.asList(
+                new Person("jack", LocalDate.of(1999, 1, 1), Sex.MALE, "j@mail.com"),
+                new Person("danielle", LocalDate.of(1992, 12, 1), Sex.FEMALE, "d@mail.com"),
+                new Person("livy", LocalDate.of(1989, 5, 12), Sex.FEMALE, "l@mail.com"),
+                new Person("mark", LocalDate.of(1993, 1, 10), Sex.MALE, "m@mail.com"),
+                new Person("anna", LocalDate.of(1985, 3, 11), Sex.FEMALE, "a@mail.com"),
+                new Person("bree", LocalDate.of(1985, 5, 6), Sex.FEMALE, "b@mail.com"));
         new Car(roster.get(0), Type.TOWNCAR, "i-1");
         new Car(roster.get(1), Type.TOWNCAR, "i-2");
         new Car(roster.get(2), Type.PICKUP, "i-3");
@@ -46,31 +48,30 @@ public class StreamIntegrationTest {
 
     @Test
     public final void should_get_only_males() {
-        final List<String> names = new ArrayList<>();
-        //turn into java 8 stream way
-        for (final Person p : roster) {
-            if (p.getGender() == Person.Sex.MALE) {
-                names.add(p.getName());
-            }
-        }
-        fail("turn the grouping into java 8 and then remove this line! (and of courese fix the assertions)");
-        assertEquals(Arrays.asList("jack"), names);
+        final List<String> names = roster.stream().filter(p -> p.getGender() == Sex.MALE).map(Person::getName).collect(Collectors.toList());
+
+        assertEquals(Arrays.asList("jack", "mark"), names);
     }
 
     @Test
     public final void should_count_by_type() {
-        final Map<Car.Type, Integer> countByType = new HashMap<>();
-        for (final Person p : roster) {
-            if (p.getAge() > 18) {
-                final Car car = p.getCar();
-                if (car != null && car.getInsuranceId() != null) {
-                    final Integer count = countByType.getOrDefault(car.getType(), 1);
-                    countByType.put(car.getType(), count + 1);
-                }
-            }
-        }
-        fail("turn the grouping into java 8 and then remove this line! (and of courese fix the assertions)");
-        assertEquals(new Integer(0), countByType.get(Type.TOWNCAR));
-        assertEquals(new Integer(0), countByType.get(Type.PICKUP));
+//        final Map<Car.Type, Integer> countByType = new HashMap<>();
+//        for (final Person p : roster) {
+//            if (p.getAge() > 18) {
+//                final Car car = p.getCar();
+//                if (car != null && car.getInsuranceId() != null) {
+//                    final Integer count = countByType.getOrDefault(car.getType(), 1);
+//                    countByType.put(car.getType(), count + 1);
+//                }
+//            }
+//        }
+        final Map<Type, Long> countByType = roster
+                .stream()
+                .filter(p -> p.getAge() > 18 && p.getCar() != null && p.getCar().getInsuranceId() != null)
+                .map(Person::getCar)
+                .collect(Collectors.groupingBy(Car::getType, Collectors.counting()));
+
+        assertEquals(Long.valueOf(2), countByType.get(Type.TOWNCAR));
+        assertEquals(Long.valueOf(2), countByType.get(Type.PICKUP));
     }
 }
