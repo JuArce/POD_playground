@@ -24,16 +24,16 @@ public class StreamParallelTest {
 
     @Test
     public final void stream_as_is() {
-        assertEquals("what we obtain?", "",
-                Stream.of(intArray).map(v -> v.toString()).collect(Collectors.joining(", ")));
+        assertEquals("what we obtain?", "5, 2, 9, 1, 3, 4, 7, 6, 8",
+                Stream.of(intArray).map(Object::toString).collect(Collectors.joining(", ")));
     }
 
     @Test
     public final void stream_ordered() {
         final Comparator<Integer> naturalOrder = Integer::compare;
         final Stream<Integer> stream = Stream.of(intArray);
-        assertEquals("what we obtain?", "", time_action("serialized", () -> stream.sorted(naturalOrder))
-                .map(v -> v.toString())
+        assertEquals("what we obtain?", "1, 2, 3, 4, 5, 6, 7, 8, 9", time_action("serialized", () -> stream.sorted(naturalOrder))
+                .map(Object::toString)
                     .collect(Collectors.joining(", ")));
     }
 
@@ -41,9 +41,9 @@ public class StreamParallelTest {
     public final void stream_reversed_ordered() {
         final Comparator<Integer> naturalOrder = Integer::compare;
         final Stream<Integer> stream = Stream.of(intArray);
-        assertEquals("what we obtain?", "",
+        assertEquals("what we obtain?", "9, 8, 7, 6, 5, 4, 3, 2, 1",
                 time_action("reversed", () -> stream.sorted(naturalOrder.reversed()))
-                        .map(v -> v.toString())
+                        .map(Object::toString)
                             .collect(Collectors.joining(", ")));
     }
 
@@ -51,15 +51,15 @@ public class StreamParallelTest {
     public final void stream_parallel_ordered() {
         final Comparator<Integer> naturalOrder = Integer::compare;
         final Stream<Integer> parallel = Stream.of(intArray).parallel();
-        assertEquals("what we obtain?", "", time_action("parallel", () -> parallel.sorted(naturalOrder))
-                .map(v -> v.toString())
+        assertEquals("what we obtain?", "1, 2, 3, 4, 5, 6, 7, 8, 9", time_action("parallel", () -> parallel.sorted(naturalOrder))
+                .map(Object::toString)
                     .collect(Collectors.joining(", ")));
     }
 
     @Test
     public final void stream_parallel() {
-        Stream.of(intArray).parallel().forEach(v -> System.out.print(v));
-        fail("each time the impression is different as concurrent execution is not deterministic.");
+        Stream.of(intArray).parallel().forEach(System.out::print);
+        //fail("each time the impression is different as concurrent execution is not deterministic.");
     }
 
     private Stream<Integer> time_action(String type, Supplier<Stream<Integer>> f) {
